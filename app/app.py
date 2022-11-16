@@ -14,7 +14,7 @@ def getRandomWord():
         word = r.get_random_word()
         while len(word) > 8:
             word = r.get_random_word()
-        words_list.append(word)
+        words_list.append(word.upper())
     return words_list
 
 def returnMatrix(words):
@@ -22,7 +22,7 @@ def returnMatrix(words):
     matrix_alphabets = []
     for w in words:
         for alphas in w:
-            matrix_alphabets.append(alphas.upper())
+            matrix_alphabets.append(alphas)
 
     rand.shuffle(matrix_alphabets)
 
@@ -71,7 +71,7 @@ app_main_heading.configure(font=('Purisa', 35, 'bold'))
 app_main_heading.grid(row=0, column=0, pady=25)
 
 # Playground Frame (Row 2 Column 1)
-playground = CTkFrame(window)
+playground = CTkFrame(window, fg_color=None)
 playground.grid(row=1, column=0, sticky="nsew")
 
 playground_matrix = CTkFrame(playground, fg_color=None)
@@ -83,11 +83,11 @@ for i in range(10):
         CTkButton(playground_matrix, text=matrix[i][j], corner_radius=0, width=50, height=50, text_font=('Helvetica', 12), text_color="#ffffff", bg_color="#000000").grid(row=i, column=j, padx=5, pady=5)
 
 # Words List (Row 2 Column 2)
-playground_status = CTkFrame(window, fg_color="yellow")
+playground_status = CTkFrame(window, fg_color=None)
 playground_status.grid(row=1, column=1, sticky="nsew")
 
-playground_status_heading = CTkLabel(playground_status, text="Find the following words: ", text_font=('Helvetica', 15))
-playground_status_heading.grid(row=0, column=0, padx=10, pady=10)
+playground_status_heading = CTkLabel(playground_status, text="Swap the alphabets to make following words: ", text_font=('Helvetica', 20), height=70)
+playground_status_heading.pack(padx=(20, 0), pady=(5, 10), anchor=W)
 
 word_check_var1 = StringVar()
 word_check_var2 = StringVar()
@@ -95,15 +95,17 @@ word_check_var3 = StringVar()
 word_check_var4 = StringVar()
 word_check_var5 = StringVar()
 
-word_checkbox_1 = CTkCheckBox(playground_status, text=words[0], command=lambda: print("pressed"), variable=word_check_var1, onvalue="on", offvalue="off")
-word_checkbox_1.grid(row=1, column=0)
-word_checkbox_2 = CTkCheckBox(playground_status, text=words[1], command=lambda: print("pressed"), variable=word_check_var2, onvalue="on", offvalue="off")
-word_checkbox_2.grid(row=2, column=0)
-word_checkbox_3 = CTkCheckBox(playground_status, text=words[2], command=lambda: print("pressed"), variable=word_check_var3, onvalue="on", offvalue="off")
-word_checkbox_3.grid(row=3, column=0)
-word_checkbox_4 = CTkCheckBox(playground_status, text=words[3], command=lambda: print("pressed"), variable=word_check_var4, onvalue="on", offvalue="off")
-word_checkbox_4.grid(row=4, column=0)
-word_checkbox_5 = CTkCheckBox(playground_status, text=words[4], command=lambda: print("pressed"), variable=word_check_var5, onvalue="on", offvalue="off")
-word_checkbox_5.grid(row=5, column=0)
+word_checkbox_1 = CTkCheckBox(playground_status, text=words[0], command=lambda: print("pressed"), variable=word_check_var1, onvalue="on", offvalue="off", text_font=('Helvetica', 15), corner_radius=15, border_width=2, text_color_disabled="#000000", state=DISABLED)
+word_checkbox_1.pack(padx=(50, 0), pady=10, anchor=W)
+word_checkbox_2 = CTkCheckBox(playground_status, text=words[1], command=lambda: print("pressed"), variable=word_check_var2, onvalue="on", offvalue="off", text_font=('Helvetica', 15), corner_radius=15, border_width=2, text_color_disabled="#000000", state=DISABLED)
+word_checkbox_2.pack(padx=(50, 0), pady=10, anchor=W)
+word_checkbox_3 = CTkCheckBox(playground_status, text=words[2], command=lambda: print("pressed"), variable=word_check_var3, onvalue="on", offvalue="off", text_font=('Helvetica', 15), corner_radius=15, border_width=2, text_color_disabled="#000000", state=DISABLED)
+word_checkbox_3.pack(padx=(50, 0), pady=10, anchor=W)
+word_checkbox_4 = CTkCheckBox(playground_status, text=words[3], command=lambda: print("pressed"), variable=word_check_var4, onvalue="on", offvalue="off", text_font=('Helvetica', 15), corner_radius=15, border_width=2, text_color_disabled="#000000", state=DISABLED)
+word_checkbox_4.pack(padx=(50, 0), pady=10, anchor=W)
+word_checkbox_5 = CTkCheckBox(playground_status, text=words[4], command=lambda: print("pressed"), variable=word_check_var5, onvalue="on", offvalue="off", text_font=('Helvetica', 15), corner_radius=15, border_width=2, text_color_disabled="#000000", state=DISABLED)
+word_checkbox_5.pack(padx=(50, 0), pady=10, anchor=W)
+
+# word_checkbox_3.select(1)
 
 window.mainloop()
