@@ -13,18 +13,18 @@ matrix = []
 
 # Fetch five random words
 def getRandomWord():
-    words_list = []
+    words_list = dict()
     for i in range(5):
         word = r.get_random_word()
         while len(word) > 8:
             word = r.get_random_word()
-        words_list.append(word.upper())
+        words_list[i] = word.upper()
     return words_list
 
 def returnMatrix(words):
     alphabets = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
     matrix_alphabets = []
-    for w in words:
+    for w in words.values():
         for alphas in w:
             matrix_alphabets.append(alphas)
 
@@ -114,6 +114,32 @@ def swap_tiles():
         btn.configure(fg_color=BTN_COLOR)
         btn.configure(state=NORMAL)
 
+word_checkboxes = []
+def check_word():
+    word = ""
+    btns = []
+    # Gather buttons
+    for coordinate in clicked:
+        for btn in matrix_btn_array:
+            if (btn.coordinate == coordinate):
+                btns.append(btn)
+                word += btn.text
+
+    for w in word_checkboxes:
+        if (w.text == word):
+            w.select(1)
+            clicked.clear()
+        else:
+            print("No Match! Try again.")
+
+    repopulate_the_fields(btns)
+    
+def repopulate_the_fields(word_tiles):
+    alphabets = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+    for tiles in word_tiles:
+        tiles.configure(text=alphabets[rand.randrange(len(alphabets))])
+        tiles.configure(fg_color=BTN_COLOR)
+
 window = CTk(fg_color="#ffffff")
 window.title("Word Puzzel Game")
 # Default size  
@@ -149,7 +175,7 @@ playground_matrix.pack()
 swap_btn = CTkButton(playground, text="SWAP", text_color="#ffffff", fg_color=BTN_COLOR_DISABLED, state=DISABLED, text_font=('Helvetica', 13), height=50, command=swap_tiles)
 swap_btn.pack(side=LEFT, padx=250, pady=0)
 
-check_btn = CTkButton(playground, text="CHECK", fg_color=BTN_COLOR_DISABLED, state=DISABLED, text_color="#ffffff", text_font=('Helvetica', 13), height=50)
+check_btn = CTkButton(playground, text="CHECK", fg_color=BTN_COLOR_DISABLED, state=DISABLED, text_color="#ffffff", text_font=('Helvetica', 13), height=50, command=check_word)
 check_btn.pack(side=LEFT, padx=0, pady=0)
 
 # Dynamically create 10 by 10 matrix
@@ -184,6 +210,6 @@ word_checkbox_4.pack(padx=(50, 0), pady=10, anchor=W)
 word_checkbox_5 = CTkCheckBox(playground_status, text=words[4], command=lambda: print("pressed"), variable=word_check_var5, onvalue="on", offvalue="off", text_font=('Helvetica', 15), corner_radius=15, border_width=2, text_color_disabled="#000000", state=DISABLED)
 word_checkbox_5.pack(padx=(50, 0), pady=10, anchor=W)
 
-word_checkbox_3.select(1)
+word_checkboxes.extend([word_checkbox_1, word_checkbox_2, word_checkbox_3, word_checkbox_4, word_checkbox_5])
 
 window.mainloop()

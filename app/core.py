@@ -7,18 +7,18 @@ matrix = []
 
 # Fetch five random words
 def getRandomWord():
-    words_list = []
+    words_list = dict()
     for i in range(5):
         word = r.get_random_word()
         while len(word) > 8:
             word = r.get_random_word()
-        words_list.append(word)
+        words_list[i] = word
     return words_list
 
 def returnMatrix(words):
     alphabets = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
     matrix_alphabets = []
-    for w in words:
+    for w in words.values():
         # print(w)
         for alphas in w:
             matrix_alphabets.append(alphas.upper())
@@ -43,6 +43,5 @@ def returnMatrix(words):
     return matrix
 
 words = getRandomWord()
-print(words)
 returnMatrix(words)
 
