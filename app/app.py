@@ -3,6 +3,10 @@ from tkinter import *
 from random_word import RandomWords
 import random as rand
 
+BTN_COLOR = "#3B8ED0"
+BTN_COLOR_HOVER = "#36719F"
+BTN_COLOR_DISABLED = "#d4d4d4"
+
 r = RandomWords()
 
 matrix = []
@@ -48,7 +52,7 @@ returnMatrix(words)
 window = CTk(fg_color="#ffffff")
 window.title("Word Puzzel Game")
 # Default size  
-# window.geometry(str(window.winfo_screenwidth()) + "x" + str(window.winfo_screenheight()))
+window.geometry(str(window.winfo_screenwidth()) + "x" + str(window.winfo_screenheight()))
 # Minimum size
 window.minsize(1500, 700)
 # Add application icon
@@ -77,10 +81,73 @@ playground.grid(row=1, column=0, sticky="nsew")
 playground_matrix = CTkFrame(playground, fg_color=None)
 playground_matrix.pack()
 
+swap_btn = CTkButton(playground, text="SWAP", text_color="#ffffff", fg_color=BTN_COLOR_DISABLED, state=DISABLED, text_font=('Helvetica', 13), height=50)
+swap_btn.pack(side=LEFT, padx=250, pady=0)
+
+check_btn = CTkButton(playground, text="CHECK", fg_color=BTN_COLOR_DISABLED, state=DISABLED, text_color="#ffffff", text_font=('Helvetica', 13), height=50)
+check_btn.pack(side=LEFT, padx=0, pady=0)
+
+matrix_btn_array = []
+clicked=[]
+def matrix_tile_clicked(coordinate):
+    coordinate = (int(coordinate.split()[0]), int(coordinate.split()[1]))
+
+    # Check if the incoming coordinate is directly adjacent to previous coordinate
+    if len(clicked):
+        prev = clicked[len(clicked)-1]
+        print(prev[0], prev[1])
+        if ((coordinate[0] in range(prev[0]-1, prev[0]+2) and prev[1] == coordinate[1]) or (coordinate[1] in range(prev[1]-1, prev[1]+2) and prev[0] == coordinate[0])):
+            print(coordinate in clicked)
+            if coordinate in clicked:
+                # If present in the clicked list
+                clicked.remove(coordinate)
+                for btn in matrix_btn_array:
+                    if (btn.coordinate == coordinate):
+                        print(btn.coordinate)
+                        btn.configure(fg_color=BTN_COLOR)
+            else:
+                clicked.append(coordinate)
+                for btn in matrix_btn_array:
+                    if (btn.coordinate == coordinate):
+                        print(btn.coordinate)
+                        btn.configure(fg_color=BTN_COLOR_HOVER)
+        else:
+            print("Selection not allowed!")
+    else:
+        clicked.append(coordinate)
+        for btn in matrix_btn_array:
+            if (btn.coordinate == coordinate):
+                print(btn.coordinate)
+                btn.configure(fg_color=BTN_COLOR_HOVER)
+
+    if (len(clicked) == 2):
+        swap_btn.configure(state=NORMAL)
+        swap_btn.configure(fg_color=BTN_COLOR)
+    else:
+        swap_btn.configure(state=DISABLED)
+        swap_btn.configure(fg_color=BTN_COLOR_DISABLED)
+
+    if (len(clicked) >= 2):
+        check_btn.configure(state=NORMAL)
+        check_btn.configure(fg_color=BTN_COLOR)
+    else:
+        check_btn.configure(state=DISABLED)
+        check_btn.configure(fg_color=BTN_COLOR_DISABLED)
+    
+    print(clicked)
+
+def swap_tiles():
+    if len(clicked) <= 2:
+        # Do stuff
+        print("Enabled")
+
 # Dynamically create 10 by 10 matrix
 for i in range(10):
     for j in range(10):
-        CTkButton(playground_matrix, text=matrix[i][j], corner_radius=0, width=50, height=50, text_font=('Helvetica', 12), text_color="#ffffff", bg_color="#000000").grid(row=i, column=j, padx=5, pady=5)
+        btn = CTkButton(playground_matrix, text=matrix[i][j], corner_radius=0, width=50, height=50, text_font=('Helvetica', 12), text_color="#ffffff", bg_color="#000000", command = lambda m = str(i)+' '+str(j):matrix_tile_clicked(m))
+        btn.grid(row=i, column=j, padx=5, pady=5)
+        btn.coordinate=(i, j)
+        matrix_btn_array.append(btn)
 
 # Words List (Row 2 Column 2)
 playground_status = CTkFrame(window, fg_color=None)
@@ -106,6 +173,6 @@ word_checkbox_4.pack(padx=(50, 0), pady=10, anchor=W)
 word_checkbox_5 = CTkCheckBox(playground_status, text=words[4], command=lambda: print("pressed"), variable=word_check_var5, onvalue="on", offvalue="off", text_font=('Helvetica', 15), corner_radius=15, border_width=2, text_color_disabled="#000000", state=DISABLED)
 word_checkbox_5.pack(padx=(50, 0), pady=10, anchor=W)
 
-# word_checkbox_3.select(1)
+word_checkbox_3.select(1)
 
 window.mainloop()
