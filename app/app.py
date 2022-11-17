@@ -49,44 +49,6 @@ def returnMatrix(words):
 words = getRandomWord()
 returnMatrix(words)
 
-window = CTk(fg_color="#ffffff")
-window.title("Word Puzzel Game")
-# Default size  
-window.geometry(str(window.winfo_screenwidth()) + "x" + str(window.winfo_screenheight()))
-# Minimum size
-window.minsize(1500, 700)
-# Add application icon
-icon = PhotoImage(file='/home/suyash/Work/Programming/Tkinter/word-puzzel-game/assets/favicon.png')
-window.tk.call('wm', 'iconphoto', window._w, icon)
-# Set application theme
-set_appearance_mode("light")
-
-# Grid Configuration
-window.grid_rowconfigure((1), weight=1)
-window.grid_columnconfigure((0, 1), weight=1)
-
-# Heading frame (Row 1)
-app_header = CTkFrame(window, fg_color=None)
-app_header.grid(row=0, column=0, columnspan=2, sticky="ns")
-
-# Main heading (Children of Heading frame)
-app_main_heading = CTkLabel(app_header, text="Word Puzzle Game", text_color="orange")
-app_main_heading.configure(font=('Purisa', 35, 'bold'))
-app_main_heading.grid(row=0, column=0, pady=25)
-
-# Playground Frame (Row 2 Column 1)
-playground = CTkFrame(window, fg_color=None)
-playground.grid(row=1, column=0, sticky="nsew")
-
-playground_matrix = CTkFrame(playground, fg_color=None)
-playground_matrix.pack()
-
-swap_btn = CTkButton(playground, text="SWAP", text_color="#ffffff", fg_color=BTN_COLOR_DISABLED, state=DISABLED, text_font=('Helvetica', 13), height=50)
-swap_btn.pack(side=LEFT, padx=250, pady=0)
-
-check_btn = CTkButton(playground, text="CHECK", fg_color=BTN_COLOR_DISABLED, state=DISABLED, text_color="#ffffff", text_font=('Helvetica', 13), height=50)
-check_btn.pack(side=LEFT, padx=0, pady=0)
-
 matrix_btn_array = []
 clicked=[]
 def matrix_tile_clicked(coordinate):
@@ -137,9 +99,58 @@ def matrix_tile_clicked(coordinate):
     print(clicked)
 
 def swap_tiles():
-    if len(clicked) <= 2:
-        # Do stuff
-        print("Enabled")
+    btns = []
+    for coordinate in clicked:
+        for btn in matrix_btn_array:
+            if coordinate == btn.coordinate:
+                btns.append(btn)
+
+    temp = btns[0].text
+    btns[0].configure(text=btns[1].text)
+    btns[1].configure(text=temp)
+    clicked.clear()
+
+    for btn in btns:
+        btn.configure(fg_color=BTN_COLOR)
+        btn.configure(state=NORMAL)
+
+window = CTk(fg_color="#ffffff")
+window.title("Word Puzzel Game")
+# Default size  
+window.geometry(str(window.winfo_screenwidth()) + "x" + str(window.winfo_screenheight()))
+# Minimum size
+window.minsize(1500, 700)
+# Add application icon
+icon = PhotoImage(file='/home/suyash/Work/Programming/Tkinter/word-puzzel-game/assets/favicon.png')
+window.tk.call('wm', 'iconphoto', window._w, icon)
+# Set application theme
+set_appearance_mode("light")
+
+# Grid Configuration
+window.grid_rowconfigure((1), weight=1)
+window.grid_columnconfigure((0, 1), weight=1)
+
+# Heading frame (Row 1)
+app_header = CTkFrame(window, fg_color=None)
+app_header.grid(row=0, column=0, columnspan=2, sticky="ns")
+
+# Main heading (Children of Heading frame)
+app_main_heading = CTkLabel(app_header, text="Word Puzzle Game", text_color="orange")
+app_main_heading.configure(font=('Purisa', 35, 'bold'))
+app_main_heading.grid(row=0, column=0, pady=25)
+
+# Playground Frame (Row 2 Column 1)
+playground = CTkFrame(window, fg_color=None)
+playground.grid(row=1, column=0, sticky="nsew")
+
+playground_matrix = CTkFrame(playground, fg_color=None)
+playground_matrix.pack()
+
+swap_btn = CTkButton(playground, text="SWAP", text_color="#ffffff", fg_color=BTN_COLOR_DISABLED, state=DISABLED, text_font=('Helvetica', 13), height=50, command=swap_tiles)
+swap_btn.pack(side=LEFT, padx=250, pady=0)
+
+check_btn = CTkButton(playground, text="CHECK", fg_color=BTN_COLOR_DISABLED, state=DISABLED, text_color="#ffffff", text_font=('Helvetica', 13), height=50)
+check_btn.pack(side=LEFT, padx=0, pady=0)
 
 # Dynamically create 10 by 10 matrix
 for i in range(10):
